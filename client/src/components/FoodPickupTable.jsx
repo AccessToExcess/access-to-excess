@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-export default function Table({ endpoint, title = "Table" }) {
+export default function FoodPickupTable({ endpoint, title = "Table" }) {
 
     const [data, setData] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -49,14 +49,14 @@ export default function Table({ endpoint, title = "Table" }) {
                             </div>
 
                             <div className="flex flex-col">
-                                <span className="text-sm font-semibold text-gray-700 mb-1">Start Time</span>
+                                <span className="text-xs font-semibold text-gray-700 mb-1">Start Time</span>
                                 <span className="text-base text-gray-900">
                                     {new Date(record.fields.StartTime).toLocaleString()}
                                 </span>
                             </div>
 
                             <div className="flex flex-col">
-                                <span className="text-sm font-semibold text-gray-700 mb-1">End Time</span>
+                                <span className="text-xs font-semibold text-gray-700 mb-1">End Time</span>
                                 <span className="text-base text-gray-900">
                                     {new Date(record.fields.EndTime).toLocaleString()}
                                 </span>
