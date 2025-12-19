@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table';
 
-export default function Table() {
+export default function Table({ endpoint, columns, title = "Table" }) {
 
     const [data, setData] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -12,7 +12,7 @@ export default function Table() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(import.meta.env.VITE_API_URL + '/api/data');
+                const response = await fetch(import.meta.env.VITE_API_URL + '/api/' + endpoint);
 
                 if (!response.ok){
                     throw new Error('Failed to fetch');
@@ -28,25 +28,7 @@ export default function Table() {
         fetchData()
     }, []);
 
-    const columns = [
-        {
-            accessorKey: 'fields.Name',
-            header: 'Name',
-        },
-        {
-            accessorKey: 'fields.Notes',
-            header: 'Notes',
-        },
-        {
-            accessorKey: 'fields.Sign up',
-            header: 'Sign Up',
-        },
-        {
-            accessorKey: 'createdTime',
-            header: 'Created',
-            cell: info => new Date(info.getValue()).toLocaleDateString(),
-        },
-    ];  
+    console.log(data) 
 
     const table = useReactTable({
         data: data?.records || [],
@@ -59,7 +41,7 @@ export default function Table() {
 
     return (
         <div className="p-8">
-            <h1 className="text-2xl font-bold mb-4">Records</h1>
+            <h1 className="text-2xl font-bold mb-4">{title}</h1>
             <div className="overflow-x-auto">
                 <table className="min-w-full border-collapse border border-gray-300">
                     <thead className="bg-gray-100">
