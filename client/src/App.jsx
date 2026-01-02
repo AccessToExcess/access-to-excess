@@ -7,19 +7,23 @@ import About from './pages/About';
 import Volunteer from './pages/Volunteer';
 import Blog from './pages/Blog';
 import FoodPickup from './pages/FoodPickup';
+import MailingListSignup from './pages/MailingListSignup';
 
 function App() {
     return (
         <BrowserRouter>
-            <div className="min-h-screen bg-stone-50 text-stone-800 font-sans selection:bg-emerald-200 selection:text-emerald-900">
+            <div className="min-h-screen flex flex-col bg-stone-50 text-stone-800 font-sans selection:bg-emerald-200 selection:text-emerald-900">
                 <Header />
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/volunteer" element={<Volunteer />} />
-                    <Route path="/blog" element={<Blog />} />
-                    <Route path="/food-pickup" element={<FoodPickup />} />
-                </Routes>
+                <div className="flex-grow">    
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/volunteer" element={<Volunteer />} />
+                        <Route path="/blog" element={<Blog />} />
+                        <Route path="/food-pickup" element={<FoodPickup />} />
+                        <Route path="/mailing-list-signup" element={<MailingListSignup />} />
+                    </Routes>
+                </div>
                 <Footer />
             </div>
         </BrowserRouter>
