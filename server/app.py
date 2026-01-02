@@ -14,6 +14,7 @@ def health():
     return {"status": "ok"}
 
 # TODO: Implement Stripe integration
+# TODO: Implement Airtable integration
 
 
 @app.route("/api/food-pickup", methods=['GET'])
@@ -32,38 +33,60 @@ def get_airtable_data():
         return jsonify(response.json())
     except Exception as e:
         return jsonify({'error' : str(e)}), 500
-    
+
+
+
 
 @app.route("/api/mailinglist-subscribe", methods=["POST"])
-def subscribe():
+def add_receiver_to_mailing_list():
     try:
         MAILCHIMP_API_KEY = os.getenv("MAILCHIMP_API_KEY")
-        MAILCHIMP_AUDIENCE_ID =  os.getenv("MAILCHIMP_AUDIENCE_ID")
+        MAILCHIMP_AUDIENCE_ID = os.getenv("MAILCHIMP_AUDIENCE_ID")
         MAILCHIMP_DATA_CENTER = os.getenv("MAILCHIMP_DATA_CENTER")
-        
-        data = request.get_json()
-        email = data.get("email")
-        role = data.get("role")
-        
-        if not email or not role:
-            return jsonify({"error": "Email and role is required"}), 400
 
-        url = f"https://{MAILCHIMP_DATA_CENTER}.api.mailchimp.com/3.0/lists/{MAILCHIMP_AUDIENCE_ID}/members"
-        
-        metadata = {
+        data = request.get_json()
+
+        first_name = data.get("firstName", "").strip()
+        last_name = data.get("lastName", "").strip()
+        email = data.get("email", "").strip().lower()
+        phone = data.get("phone")
+        role = data.get("role", "recipient")
+
+        if not first_name or not last_name:
+            return jsonify({"error": "First and last name are required"}), 400
+        if not email:
+            return jsonify({"error": "Email is required"}), 400
+
+        import hashlib
+        subscriber_hash = hashlib.md5(email.encode()).hexdigest()
+
+        url = f"https://{MAILCHIMP_DATA_CENTER}.api.mailchimp.com/3.0/lists/{MAILCHIMP_AUDIENCE_ID}/members/{subscriber_hash}"
+
+        payload = {
             "email_address": email,
+            "status_if_new": "subscribed",
             "status": "subscribed",
-            "tags": [role]
+            "merge_fields": {
+                "FNAME": first_name,
+                "LNAME": last_name,
+                "PHONE": phone,
+            },
+            "tags": [role],
         }
-        
-        response = requests.post(
+
+        response = requests.put(
             url,
             auth=("anystring", MAILCHIMP_API_KEY),
-            json=metadata
+            json=payload,
         )
-        return jsonify(response.json())
+
+        if response.status_code not in (200, 201):
+            return jsonify(response.json()), response.status_code
+
+        return jsonify({"message": "Successfully subscribed", "data": response.json()})
+
     except Exception as e:
-        return jsonify({'error' : str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
