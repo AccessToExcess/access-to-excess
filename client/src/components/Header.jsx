@@ -8,7 +8,9 @@ function Header() {
     const currentPage = location.pathname;
 
     const isActive = (path) => {
-        return currentPage === path ? 'text-black font-semibold' : 'text-gray-600 hover:text-black';
+        return currentPage === path
+            ? 'text-black font-semibold'
+            : 'text-gray-600 hover:text-black';
     };
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -19,15 +21,37 @@ function Header() {
                 {/* Logo */}
                 <Link to="/" className="flex items-center gap-3 group">
                     <div className="w-10 h-10 bg-gray-200 rounded-full group-hover:bg-gray-300 transition-colors"></div>
-                    <span className="text-xl font-bold text-black tracking-tight">Access to Excess</span>
+                    <span className="text-xl font-bold text-black tracking-tight">
+                        Access to Excess
+                    </span>
                 </Link>
 
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex items-center gap-8">
-                    <Link to="/blog" className={`text-sm font-medium transition-colors ${isActive('/blog')}`}>About us</Link>
-                    {/* <Link to="/about" className={`text-sm font-medium transition-colors ${isActive('/about')}`}>About Us</Link> */}
-                    <a href="https://buy.stripe.com/test_bJe3cx2wpeEs60QeoI08g00" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-gray-600 hover:text-black transition-colors">Donate</a>
-                    <Link to="/volunteer" className={`text-sm font-medium transition-colors ${isActive('/volunteer')}`}>Volunteer</Link>
+                    <Link
+                        to="/blog"
+                        className={`text-sm font-medium transition-colors ${isActive('/blog')}`}
+                    >
+                        About Us
+                    </Link>
+
+
+
+                    <a
+                        href="https://buy.stripe.com/test_bJe3cx2wpeEs60QeoI08g00"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-medium text-gray-600 hover:text-black transition-colors"
+                    >
+                        Donate
+                    </a>
+
+                    <Link
+                        to="/volunteer"
+                        className={`text-sm font-medium transition-colors ${isActive('/volunteer')}`}
+                    >
+                        Volunteer
+                    </Link>
 
                     <Link
                         to="/food-pickup"
@@ -49,10 +73,33 @@ function Header() {
             {/* Mobile Menu Overlay */}
             {isMenuOpen && (
                 <div className="absolute top-20 left-0 w-full bg-white border-b border-gray-100 shadow-lg md:hidden flex flex-col p-4 space-y-4 animate-fade-in">
-                    <Link to="/about" className="text-base font-medium text-gray-800 py-2 border-b border-gray-50" onClick={toggleMenu}>About Us</Link>
-                    <a href="https://buy.stripe.com/test_bJe3cx2wpeEs60QeoI08g00" target="_blank" rel="noopener noreferrer" className="text-base font-medium text-gray-800 py-2 border-b border-gray-50">Donate</a>
-                    <Link to="/volunteer" className="text-base font-medium text-gray-800 py-2 border-b border-gray-50" onClick={toggleMenu}>Volunteer</Link>
-                    <Link to="/blog" className="text-base font-medium text-gray-800 py-2 border-b border-gray-50" onClick={toggleMenu}>Blog</Link>
+                    <Link
+                        to="/blog"
+                        className="text-base font-medium text-gray-800 py-2 border-b border-gray-50"
+                        onClick={toggleMenu}
+                    >
+                        About Us
+                    </Link>
+
+
+
+                    <a
+                        href="https://buy.stripe.com/test_bJe3cx2wpeEs60QeoI08g00"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-base font-medium text-gray-800 py-2 border-b border-gray-50"
+                    >
+                        Donate
+                    </a>
+
+                    <Link
+                        to="/volunteer"
+                        className="text-base font-medium text-gray-800 py-2 border-b border-gray-50"
+                        onClick={toggleMenu}
+                    >
+                        Volunteer
+                    </Link>
+
                     <Link
                         to="/food-pickup"
                         className="w-full text-center px-6 py-3 bg-gray-200 text-black text-base font-semibold rounded-md hover:bg-gray-300 transition-all mt-2"
@@ -67,3 +114,4 @@ function Header() {
 }
 
 export default Header;
+

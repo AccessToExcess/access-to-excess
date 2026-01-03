@@ -1,7 +1,10 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Table from '../components/FoodPickupTable.jsx';
 
 function FoodPickup() {
+    const navigate = useNavigate();
+
     return (
         <div className="animate-fade-in bg-white">
             {/* Hero Section */}
@@ -24,6 +27,7 @@ function FoodPickup() {
                             food you need
                         </h1>
                         <button
+                            onClick={() => navigate('/mailing-list-signup')}
                             className="px-6 py-3 bg-gray-200 text-black text-sm font-bold uppercase tracking-wide rounded-md hover:bg-gray-300 transition-all shadow-sm"
                         >
                             Sign Up for Text Alerts
