@@ -21,7 +21,7 @@ function Home() {
             >
                 <div className="max-w-7xl mx-auto">
                     <div className="max-w-3xl">
-                        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-black mb-8 leading-tight">
+                        <h1 className="text-4xl md:text-6xl font-bold text-black mb-8 leading-tight">
                             Saving excess food<br />
                             & Increasing access to it.
                         </h1>
@@ -36,7 +36,7 @@ function Home() {
             </header>
 
             {/* About Section */}
-            <section className="px-4 md:px-8 py-24 bg-stone-50">
+            <section className="px-4 md:px-8 py-24 bg-white">
                 <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
                     <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-lg group">
                         <img
@@ -47,8 +47,8 @@ function Home() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                     </div>
                     <div className="text-left">
-                        <h2 className="text-xs font-bold text-emerald-700 uppercase tracking-widest mb-6">ABOUT US</h2>
-                        <h3 className="text-3xl md:text-5xl font-medium text-black mb-8 leading-tight">
+                        <h2 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-6">ABOUT US</h2>
+                        <h3 className="text-2xl md:text-4xl font-bold text-black mb-8 leading-tight">
                             Reducing Food Waste.<br />
                             Providing Access to Food for All.
                         </h3>
@@ -65,48 +65,48 @@ function Home() {
             {/* Stats Section */}
             <section className="px-4 md:px-8 py-24 bg-white">
                 <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 text-center">
-                    <div className="p-10 rounded-2xl border border-stone-100 bg-white shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group">
-                        <div className="text-5xl md:text-6xl font-bold text-emerald-800 mb-4 group-hover:scale-105 transition-transform">180k+</div>
-                        <div className="text-xl font-semibold text-stone-800 mb-3">Pounds</div>
-                        <p className="text-sm text-stone-500 max-w-[200px] mx-auto leading-relaxed">of food rescued and redistributed in 2023.</p>
+                    <div className="p-10 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group">
+                        <div className="text-5xl md:text-6xl font-bold text-black mb-4 group-hover:scale-105 transition-transform">180k+</div>
+                        <div className="text-xl font-semibold text-gray-800 mb-3">Pounds</div>
+                        <p className="text-sm text-gray-500 max-w-[200px] mx-auto leading-relaxed">of food rescued and redistributed in 2023.</p>
                     </div>
-                    <div className="p-10 rounded-2xl border border-stone-100 bg-white shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group">
-                        <div className="text-5xl md:text-6xl font-bold text-emerald-800 mb-4 group-hover:scale-105 transition-transform">130</div>
-                        <div className="text-xl font-semibold text-stone-800 mb-3">Families</div>
-                        <p className="text-sm text-stone-500 max-w-[200px] mx-auto leading-relaxed">received 40 pounds of food in 2023.</p>
+                    <div className="p-10 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group">
+                        <div className="text-5xl md:text-6xl font-bold text-black mb-4 group-hover:scale-105 transition-transform">130</div>
+                        <div className="text-xl font-semibold text-gray-800 mb-3">Families</div>
+                        <p className="text-sm text-gray-500 max-w-[200px] mx-auto leading-relaxed">received 40 pounds of food in 2023.</p>
                     </div>
-                    <div className="p-10 rounded-2xl border border-stone-100 bg-white shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group">
-                        <div className="text-5xl md:text-6xl font-bold text-emerald-800 mb-4 group-hover:scale-105 transition-transform">500k+</div>
-                        <div className="text-xl font-semibold text-stone-800 mb-3">Pounds</div>
-                        <p className="text-sm text-stone-500 max-w-[200px] mx-auto leading-relaxed">of food rescued and redistributed since our founding in 2019.</p>
+                    <div className="p-10 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group">
+                        <div className="text-5xl md:text-6xl font-bold text-black mb-4 group-hover:scale-105 transition-transform">500k+</div>
+                        <div className="text-xl font-semibold text-gray-800 mb-3">Pounds</div>
+                        <p className="text-sm text-gray-500 max-w-[200px] mx-auto leading-relaxed">of food rescued and redistributed since our founding in 2019.</p>
                     </div>
                 </div>
             </section>
 
             {/* Growth & Progress */}
-            <section className="px-4 md:px-8 py-24 bg-stone-50">
+            <section className="px-4 md:px-8 py-24 bg-gray-50">
                 <div className="max-w-4xl mx-auto">
-                    <h2 className="text-3xl font-bold text-stone-900 mb-12 text-center">Growth & Progress</h2>
+                    <h2 className="text-2xl font-bold text-black mb-12 text-center">Growth & Progress</h2>
                     <div className="space-y-8">
-                        <div className="flex items-start bg-white p-8 rounded-xl shadow-sm border border-stone-100">
-                            <div className="flex-shrink-0 w-4 h-4 rounded-full bg-emerald-500 mt-2 mr-6"></div>
+                        <div className="flex items-start bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                            <div className="flex-shrink-0 w-4 h-4 rounded-full bg-black mt-2 mr-6"></div>
                             <div>
-                                <h3 className="text-xl font-bold text-stone-800 mb-2">Expanded Pickup Network</h3>
-                                <p className="text-stone-600 leading-relaxed">Partnered with 5 new local farms and 3 grocery chains to increase food recovery volume.</p>
+                                <h3 className="text-xl font-bold text-black mb-2">Expanded Pickup Network</h3>
+                                <p className="text-gray-600 leading-relaxed">Partnered with 5 new local farms and 3 grocery chains to increase food recovery volume.</p>
                             </div>
                         </div>
-                        <div className="flex items-start bg-white p-8 rounded-xl shadow-sm border border-stone-100">
-                            <div className="flex-shrink-0 w-4 h-4 rounded-full bg-emerald-500 mt-2 mr-6"></div>
+                        <div className="flex items-start bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                            <div className="flex-shrink-0 w-4 h-4 rounded-full bg-black mt-2 mr-6"></div>
                             <div>
-                                <h3 className="text-xl font-bold text-stone-800 mb-2">New Distribution Hub</h3>
-                                <p className="text-stone-600 leading-relaxed">Opened a central sorting facility to handle larger donations and improve distribution efficiency.</p>
+                                <h3 className="text-xl font-bold text-black mb-2">New Distribution Hub</h3>
+                                <p className="text-gray-600 leading-relaxed">Opened a central sorting facility to handle larger donations and improve distribution efficiency.</p>
                             </div>
                         </div>
-                        <div className="flex items-start bg-white p-8 rounded-xl shadow-sm border border-stone-100">
-                            <div className="flex-shrink-0 w-4 h-4 rounded-full bg-emerald-500 mt-2 mr-6"></div>
+                        <div className="flex items-start bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                            <div className="flex-shrink-0 w-4 h-4 rounded-full bg-black mt-2 mr-6"></div>
                             <div>
-                                <h3 className="text-xl font-bold text-stone-800 mb-2">Community Education</h3>
-                                <p className="text-stone-600 leading-relaxed">Launched workshops on food preservation and sustainable cooking for community members.</p>
+                                <h3 className="text-xl font-bold text-black mb-2">Community Education</h3>
+                                <p className="text-gray-600 leading-relaxed">Launched workshops on food preservation and sustainable cooking for community members.</p>
                             </div>
                         </div>
                     </div>
@@ -116,7 +116,7 @@ function Home() {
             {/* Video Section */}
             <section className="px-4 md:px-8 py-24 bg-white text-center">
                 <div className="max-w-5xl mx-auto">
-                    <h2 className="text-3xl md:text-5xl font-medium text-black mb-16">What Can We Do About Food Waste?</h2>
+                    <h2 className="text-2xl font-bold text-black mb-16">What Can We Do About Food Waste?</h2>
                     <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black">
                         <iframe
                             width="100%"
