@@ -19,9 +19,10 @@ def health():
 
 @app.route("/api/food-pickup", methods=['GET'])
 def get_airtable_data():
+    table_id = "tblEadgBO51Cm8eMm"
     try:
         token = os.getenv('AIRTABLE_TOKEN')
-        url = os.getenv('AIRTABLE_URL')
+        url = os.getenv('AIRTABLE_URL') + table_id
 
         headers = {
             'Authorization' : f'Bearer {token}'
@@ -33,7 +34,60 @@ def get_airtable_data():
         return jsonify(response.json())
     except Exception as e:
         return jsonify({'error' : str(e)}), 500
+    
 
+@app.route("/api/blogs", methods=['GET'])
+def get_blogs():
+    table_id = "tblbTwkoJHoiqBIJV"
+
+    try:
+        token = os.getenv('AIRTABLE_TOKEN')
+        url = os.getenv('AIRTABLE_URL') + table_id
+
+        headers = {
+            'Authorization' : f'Bearer {token}'
+        }
+
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+
+        data = response.json()
+        records = []
+
+        for record in data.get('records', []):
+            fields = record.get('fields', {})
+            images = []
+
+            if 'Attachments' in fields:
+                for attachment in fields['Attachments']:
+                    # Get down to the url
+                    thumbnails = attachment.get('thumbnails', {})
+                    fullsize_image = thumbnails.get('full', {})
+
+                    images.append({
+                        'url': fullsize_image.get('url'),
+                        'filename': attachment.get('filename'),
+                        'type': attachment.get('type')
+                    })
+            
+            formatted_record = {
+                'id': record.get('id'),
+                'Content': fields.get('Content', ''),
+                'Title': fields.get('Title', ''),
+                'Date': fields.get('Date', ''),
+                'Images': images
+            }
+
+            records.append(formatted_record)
+
+
+        return jsonify({
+            'success': True,
+            'count': len(records),
+            'records': records
+        }), 200
+    except Exception as e:
+        return jsonify({'error' : str(e)}), 500
 
 
 
