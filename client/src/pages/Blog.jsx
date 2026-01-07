@@ -1,6 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 function Blog() {
+    const endpoint = "blogs"
+    console.log(import.meta.env.VITE_API_URL + '/api/' + endpoint)
+    useEffect(() => {
+        try{
+            const fetchData = async () => {
+                const response = await fetch(import.meta.env.VITE_API_URL + '/api/' + endpoint);
+                const data = await response.json();
+
+                console.log('Full response:', data);
+
+                if (data.records && data.records.length > 0) {
+                    data.records.forEach(record => {
+                        console.log(record.Content, record.Data, record.Title);
+                        if (record.images && record.images.length > 0){
+                            record.images.forEach(img => {
+                                console.log(img.url);
+                            })
+                        }
+                        })
+                }
+            }
+            fetchData();
+        } catch(error) {
+            console.error('Error fetching data:', error)
+        }
+    }, [])
+    // const posts = await fetch(import.meta.env.VITE_API_URL + '/api/' + endpoint)
+
+
+
     const posts = [
         {
             id: 1,
