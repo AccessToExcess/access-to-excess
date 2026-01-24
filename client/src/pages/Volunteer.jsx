@@ -26,15 +26,15 @@ function Volunteer() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevData => ({
-            ...prevData,      // Keep all existing fields
+            ...prevData,
             [name]: value     // Update only the field that changed
         }));
-        
+
         console.log(formData);
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault();
 
         try {
             const response = await fetch(import.meta.env.VITE_API_URL + '/api/volunteer-signup', {
@@ -42,7 +42,7 @@ function Volunteer() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData), // formData should be your state object
+                body: JSON.stringify(formData),
             });
 
             if (!response.ok) {
@@ -52,11 +52,8 @@ function Volunteer() {
             const result = await response.json();
             console.log('Success:', result);
 
-            // Show success message to user
             alert('Form submitted successfully! Thank you!');
 
-            // Optionally reset form
-            // setFormData({ field1: '', field2: '' });
 
         } catch (error) {
             console.error('Error:', error);
@@ -206,7 +203,11 @@ function Volunteer() {
 
                             <div>
                                 <label className="block text-xs font-medium text-gray-700 mb-2">Preferred Contact Method *</label>
-                                <input name="contactMethod" value={formData.contactMethod} onChange={handleChange} type="text" className="w-full px-4 py-3 bg-white border border-gray-200 rounded-md text-sm focus:outline-none focus:border-black transition-colors" required />
+                                <select name="contactMethod" value={formData.contactMethod} onChange={handleChange} className="w-full px-4 py-3 bg-white border border-gray-200 rounded-md text-sm focus:outline-none focus:border-black transition-colors" required>
+                                    <option value="">Select a method</option>
+                                    <option value="Email">Email</option>
+                                    <option value="Phone">Phone</option>
+                                </select>
                             </div>
 
                             <div>
