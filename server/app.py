@@ -109,12 +109,8 @@ def volunteer_signup():
                 }
             ]
         }
-        print(airtable_data)
         token = os.getenv('AIRTABLE_TOKEN')
         url = os.getenv('AIRTABLE_URL') + table_id + '/'
-
-        print(token)
-        print(url)
 
         headers = {
             'Authorization' : f'Bearer {token}',

@@ -29,8 +29,6 @@ function Volunteer() {
             ...prevData,
             [name]: value     // Update only the field that changed
         }));
-
-        console.log(formData);
     };
 
     const handleSubmit = async (e) => {
@@ -50,7 +48,6 @@ function Volunteer() {
             }
 
             const result = await response.json();
-            console.log('Success:', result);
 
             alert('Form submitted successfully! Thank you!');
 
