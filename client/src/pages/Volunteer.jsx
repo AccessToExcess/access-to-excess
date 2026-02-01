@@ -78,15 +78,40 @@ function Volunteer() {
         }
     };
 
-    const handleInputChange = (e) => {
+    // Update formData when user types
+    const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value     // Update only the field that changed
+        }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
-        // Handle form submission here
+
+        try {
+            const response = await fetch(import.meta.env.VITE_API_URL + '/api/volunteer-signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            alert('Form submitted successfully! Thank you!');
+
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to submit form. Please try again.');
+        }
     };
 
     const faqs = [
