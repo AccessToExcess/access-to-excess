@@ -100,7 +100,6 @@ def volunteer_signup():
                         "Full Name": data.get("name"),
                         "Email Address": data.get("email"),
                         "Phone Number": data.get("phone"),
-                        "Preferred Contact Method": data.get("contactMethod"),
                         "General Availability": data.get("availability")
                     }
                 }
