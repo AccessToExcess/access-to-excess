@@ -196,15 +196,40 @@ def create_donation():
         if is_monthly:
             metadata['billing_cycle'] = 'monthly'
             metadata['recurring'] = 'true'
-        
-        intent = stripe.PaymentIntent.create(
-            amount=amount_in_cents,
-            currency='usd',
-            receipt_email=user_email,
-            automatic_payment_methods={'enabled': True},
-            metadata=metadata
-        )
-        return jsonify({'clientSecret': intent['client_secret']})
+            
+            price = stripe.Price.create(
+                unit_amount=amount_in_cents,
+                currency='usd',
+                recurring={'interval': 'month'},
+                product_data={
+                    'name': f'Monthly Donation - {fund}',
+                },
+                metadata=metadata
+            )
+            
+            subscription = stripe.Subscription.create(
+                customer_email=user_email,
+                items=[{'price': price.id}],
+                payment_behavior='default_incomplete',
+                payment_settings={'save_default_payment_method': 'on_subscription'},
+                expand=['latest_invoice.payment_intent'],
+                metadata=metadata
+            )
+            
+            return jsonify({
+                'clientSecret': subscription.latest_invoice.payment_intent.client_secret,
+                'subscriptionId': subscription.id
+            })
+        else:
+            intent = stripe.PaymentIntent.create(
+                amount=amount_in_cents,
+                currency='usd',
+                receipt_email=user_email,
+                automatic_payment_methods={'enabled': True},
+                payment_method_types=['card'],
+                metadata=metadata
+            )
+            return jsonify({'clientSecret': intent['client_secret']})
     except Exception as e:
         return jsonify(error=str(e)), 403
 
