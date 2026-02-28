@@ -378,10 +378,7 @@ export default function Donate() {
             ) : clientSecret ? (
               <Elements key={clientSecret} options={{ 
                 clientSecret, 
-                appearance: { theme: 'stripe' },
-                mode: 'payment',
-                amount: amount * 100,
-                currency: 'usd'
+                appearance: { theme: 'stripe' }
               }} stripe={stripePromise}>
                 <DonationFormWrapper amount={amount} email={email} isMonthlyGift={isMonthlyGift} />
               </Elements>
