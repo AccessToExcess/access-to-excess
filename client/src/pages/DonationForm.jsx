@@ -1,9 +1,4 @@
 import { useEffect, useState, useRef } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import DonationForm from '../components/Donate';
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 // Fruit & Vegetable SVG Icons for decoration
 const AppleIcon = ({ className }) => (
@@ -63,7 +58,6 @@ const BroccoliIcon = ({ className }) => (
 );
 
 export default function Donate() {
-  const [clientSecret, setClientSecret] = useState("");
   const [amount, setAmount] = useState(50);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -82,22 +76,31 @@ export default function Donate() {
 
   const isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
-  const getPaymentIntent = async (currentAmount, currentEmail) => {
-    if (!isValidEmail(currentEmail) || !currentAmount) return;
+  const handleDonate = async () => {
+    if (!isValidEmail(email) || !amount) return;
     setLoading(true);
     try {
-      const res = await fetch( "/api/create-donation-intent", {
+      const res = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          amount: currentAmount, 
-          email: currentEmail,
+          amount: amount, 
+          email: email,
           monthly: isMonthlyGift,
-          fund: isMonthlyGift ? 'Food Rescue Fund' : 'General Operations'
+          fund: isMonthlyGift ? 'Food Rescue Fund' : 'General Operations',
+          origin: window.location.origin
         }),
       });
       const data = await res.json();
-      setClientSecret(data.clientSecret);
+      if (!res.ok) {
+        alert('Error: ' + (data.error || 'Unknown error'));
+        return;
+      }
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -106,9 +109,6 @@ export default function Donate() {
   const handlePresetClick = (preset) => {
     setSelectedPreset(preset);
     setAmount(preset);
-    if (isValidEmail(email)) {
-      getPaymentIntent(preset, email);
-    }
   };
 
   const handleAmountChange = (e) => {
@@ -258,9 +258,6 @@ export default function Donate() {
                   onClick={() => {
                     setDonationType('once');
                     setIsMonthlyGift(false);
-                    if (isValidEmail(email)) {
-                      getPaymentIntent(amount, email);
-                    }
                   }}
                 >
                   GIVE ONCE
@@ -272,9 +269,6 @@ export default function Donate() {
                     }`}
                   onClick={() => {
                     setDonationType('monthly');
-                    if (isValidEmail(email)) {
-                      getPaymentIntent(amount, email);
-                    }
                   }}
                 >
                   MONTHLY
@@ -309,7 +303,7 @@ export default function Donate() {
                   type="number"
                   value={amount}
                   onChange={handleAmountChange}
-                  onBlur={() => getPaymentIntent(amount, email)}
+                  onBlur={() => {}}
                   className="flex-1 p-3 bg-transparent border-none focus:outline-none text-lg text-gray-800"
                   placeholder="0"
                 />
@@ -326,7 +320,7 @@ export default function Donate() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onBlur={() => getPaymentIntent(amount, email)}
+                onBlur={() => {}}
                 className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:border-[#166534] focus:ring-1 focus:ring-[#166534] transition-colors text-gray-800"
                 placeholder="your@email.com"
               />
@@ -346,10 +340,6 @@ export default function Donate() {
                     if (isChecked && donationType === 'once') {
                       setDonationType('monthly');
                     }
-                    
-                    if (isValidEmail(email)) {
-                      getPaymentIntent(amount, email);
-                    }
                   }}
                   className="w-5 h-5 text-[#138622] border-gray-300 rounded focus:ring-[#138622] focus:ring-2"
                 />
@@ -366,7 +356,7 @@ export default function Donate() {
               </p>
             </div>
 
-            {/* Stripe Payment Element Area */}
+            {/* Stripe Payment Area */}
             {!isValidEmail(email) ? (
               <div className="py-6 text-center border-2 border-dashed border-gray-200 rounded-xl bg-gray-50 mb-4">
                 <p className="text-gray-400 text-sm px-4 font-medium">Please enter your email to proceed.</p>
@@ -375,16 +365,9 @@ export default function Donate() {
               <div className="py-6 text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#166534] mx-auto"></div>
               </div>
-            ) : clientSecret ? (
-              <Elements key={clientSecret} options={{ 
-                clientSecret, 
-                appearance: { theme: 'stripe' }
-              }} stripe={stripePromise}>
-                <DonationFormWrapper amount={amount} email={email} isMonthlyGift={isMonthlyGift} />
-              </Elements>
             ) : (
               <button
-                onClick={() => getPaymentIntent(amount, email)}
+                onClick={handleDonate}
                 disabled={!isValidEmail(email)}
                 className="w-full py-4 bg-pro-light-green border-pro-light-green text-white font-bold rounded-lg hover:bg-pro-green transition-colors text-lg shadow-md disabled:opacity-50"
               >
@@ -773,34 +756,6 @@ export default function Donate() {
           </div>
         </div>
       </section>
-    </div>
-  );
-}
-
-// Wrapper component to style the existing DonationForm within the new design
-function DonationFormWrapper({ amount, email, isMonthlyGift }) {
-  return (
-    <div className="stripe-form-wrapper">
-      <DonationForm amount={amount} email={email} isMonthlyGift={isMonthlyGift} />
-      <style>{`
-        .stripe-form-wrapper form {
-          padding: 0 !important;
-          box-shadow: none !important;
-          border: none !important;
-          max-width: none !important;
-          margin: 0 !important;
-        }
-        .stripe-form-wrapper form h2 {
-          display: none !important;
-        }
-        .stripe-form-wrapper form button {
-          background-color: #FFC570 !important;
-          color: #1a1a1a !important;
-        }
-        .stripe-form-wrapper form button:hover {
-          background-color: #e5b060 !important;
-        }
-      `}</style>
     </div>
   );
 }

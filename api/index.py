@@ -174,8 +174,8 @@ def add_receiver_to_mailing_list():
 
 
 
-@app.route('/api/create-donation-intent', methods=['POST'])
-def create_donation():
+@app.route('/api/create-checkout-session', methods=['POST'])
+def create_checkout_session():
     try:
         stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
         data = request.json
@@ -187,6 +187,9 @@ def create_donation():
         is_monthly = data.get('monthly', False)
         fund = data.get('fund', 'General Operations')
         
+        success_url = data.get('origin', 'http://localhost:5173') + '/success?session_id={CHECKOUT_SESSION_ID}'
+        cancel_url = data.get('origin', 'http://localhost:5173') + '/'
+        
         metadata = {
             'type': 'donation', 
             'source': 'website',
@@ -197,40 +200,48 @@ def create_donation():
             metadata['billing_cycle'] = 'monthly'
             metadata['recurring'] = 'true'
             
-            price = stripe.Price.create(
-                unit_amount=amount_in_cents,
-                currency='usd',
-                recurring={'interval': 'month'},
-                product_data={
-                    'name': f'Monthly Donation - {fund}',
-                },
-                metadata=metadata
-            )
-            
-            subscription = stripe.Subscription.create(
+            session = stripe.checkout.Session.create(
                 customer_email=user_email,
-                items=[{'price': price.id}],
-                payment_behavior='default_incomplete',
-                payment_settings={'save_default_payment_method': 'on_subscription'},
-                expand=['latest_invoice.payment_intent'],
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'usd',
+                        'unit_amount': amount_in_cents,
+                        'recurring': {'interval': 'month'},
+                        'product_data': {
+                            'name': f'Monthly Donation - {fund}',
+                        },
+                    },
+                    'quantity': 1,
+                }],
+                mode='subscription',
+                success_url=success_url,
+                cancel_url=cancel_url,
                 metadata=metadata
             )
-            
-            return jsonify({
-                'clientSecret': subscription.latest_invoice.payment_intent.client_secret,
-                'subscriptionId': subscription.id
-            })
         else:
-            intent = stripe.PaymentIntent.create(
-                amount=amount_in_cents,
-                currency='usd',
-                receipt_email=user_email,
-                automatic_payment_methods={'enabled': True},
+            session = stripe.checkout.Session.create(
+                customer_email=user_email,
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'usd',
+                        'unit_amount': amount_in_cents,
+                        'product_data': {
+                            'name': f'Donation - {fund}',
+                        },
+                    },
+                    'quantity': 1,
+                }],
+                mode='payment',
+                success_url=success_url,
+                cancel_url=cancel_url,
                 metadata=metadata
             )
-            return jsonify({'clientSecret': intent['client_secret']})
+        
+        return jsonify({'url': session.url})
     except Exception as e:
-        return jsonify(error=str(e)), 403
+        return jsonify({'error': str(e)}), 403
 
 @app.route('/api/add-donor-to-mailchimp', methods=['POST'])
 def add_donor_to_mailchimp():
