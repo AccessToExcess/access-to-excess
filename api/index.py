@@ -34,6 +34,31 @@ def get_airtable_data():
         return jsonify({'error' : str(e)}), 500
     
 
+@app.route("/api/metrics", methods=['GET'])
+def get_metrics():
+    table_id = os.getenv('AIRTABLE_METRICS_TABLE')
+    try:
+        token = os.getenv('AIRTABLE_TOKEN')
+        url = os.getenv('AIRTABLE_URL') + table_id
+
+        headers = {'Authorization': f'Bearer {token}'}
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+
+        data = response.json()
+        metrics = {}
+        
+        # Convert Airtable rows into a simple key-value dictionary
+        for record in data.get('records', []):
+            fields = record.get('fields', {})
+            if 'Key' in fields and 'Value' in fields:
+                metrics[fields['Key']] = fields['Value']
+
+        return jsonify(metrics), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route("/api/blogs", methods=['GET'])
 def get_blogs():
     table_id = os.getenv('AIRTABLE_BLOG_TABLE')

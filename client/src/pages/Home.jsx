@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 
 // Fruit & Vegetable SVG Icons
 const AppleIcon = ({ className }) => (
@@ -80,6 +81,28 @@ const LeafIcon = ({ className }) => (
 function Home() {
   const navigate = useNavigate();
 
+  const [metrics, setMetrics] = useState({
+    total_pounds: "1.5M+",
+    total_families: "130",
+  });
+
+  // fetch metrics
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      try {
+        const response = await fetch("/api/metrics");
+        if (response.ok) {
+          const data = await response.json();
+          // Merge fetched data with fallbacks to prevent empty fields if a key is missing
+          setMetrics((prev) => ({ ...prev, ...data }));
+        }
+      } catch (error) {
+        console.error("Failed to fetch metrics:", error);
+      }
+    };
+    fetchMetrics();
+  }, []);
+
   return (
     <div className="animate-fade-in bg-white">
       {/* Hero Section - Per Correct Figma Wireframe */}
@@ -154,7 +177,7 @@ function Home() {
         <div className="flex flex-col md:flex-row justify-center items-start gap-8 md:gap-16 max-w-4xl mx-auto">
           <div className="py-8 items-center text-center">
             <div className="text-4xl md:text-5xl font-bold text-pro-green mb-2">
-              1.5M+ Pounds
+              {metrics.total_pounds} Pounds
             </div>
             <p className="text-sm text-gray-600 max-w-[220px] mx-auto leading-relaxed">
               of food rescued and redistributed since our founding in 2019.
@@ -162,7 +185,7 @@ function Home() {
           </div>
           <div className="py-8 items-center text-center">
             <div className="text-4xl md:text-5xl font-bold text-pro-green mb-2">
-              130 Families
+              {metrics.total_families} Families
             </div>
             <p className="text-sm text-gray-600 max-w-[220px] mx-auto leading-relaxed">
               received 40 pounds of food in 2023.
