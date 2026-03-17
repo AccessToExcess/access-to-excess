@@ -81,8 +81,11 @@ function Home() {
   const navigate = useNavigate();
 
   const [metrics, setMetrics] = useState({
-    total_pounds: "1.5M+",
-    total_families: "130",
+    metric_1_heading: "1.5M+ Pounds",
+    metric_1_subtext:
+      "of food rescued and redistributed since our founding in 2019.",
+    metric_2_heading: "130 Families",
+    metric_2_subtext: "received 40 pounds of food in 2023.",
   });
 
   // fetch metrics
@@ -176,18 +179,18 @@ function Home() {
         <div className="flex flex-col md:flex-row justify-center items-start gap-8 md:gap-16 max-w-4xl mx-auto">
           <div className="py-8 items-center text-center">
             <div className="text-4xl md:text-5xl font-bold text-pro-green mb-2">
-              {metrics.total_pounds} Pounds
+              {metrics.metric_1_heading}
             </div>
             <p className="text-sm text-gray-600 max-w-[220px] mx-auto leading-relaxed">
-              of food rescued and redistributed since our founding in 2019.
+              {metrics.metric_1_subtext}
             </p>
           </div>
           <div className="py-8 items-center text-center">
             <div className="text-4xl md:text-5xl font-bold text-pro-green mb-2">
-              {metrics.total_families} Families
+              {metrics.metric_2_heading}
             </div>
             <p className="text-sm text-gray-600 max-w-[220px] mx-auto leading-relaxed">
-              received 40 pounds of food in 2023.
+              {metrics.metric_2_subtext}
             </p>
           </div>
           {/* <div className="py-8">
